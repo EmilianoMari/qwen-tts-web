@@ -62,7 +62,9 @@ class VoiceForge {
                 e.preventDefault();
                 this.generateSpeech();
             }
-            if (e.key === ' ' && document.activeElement !== this.textInput) {
+            // Only toggle play on spacebar if not in a text input
+            const tag = document.activeElement.tagName.toLowerCase();
+            if (e.key === ' ' && tag !== 'textarea' && tag !== 'input') {
                 e.preventDefault();
                 this.togglePlay();
             }
@@ -91,16 +93,16 @@ class VoiceForge {
 
     async generateSpeech() {
         const text = this.textInput.value.trim();
-        const voiceDescription = this.voiceDescription.value.trim() || 'A natural, clear voice';
+        const voiceDescription = this.voiceDescription.value.trim() || 'Una voce naturale e chiara';
         const language = this.languageSelect.value;
 
         if (!text) {
-            this.showError('Please enter some text to convert to speech.');
+            this.showError('Inserisci del testo da convertire in voce.');
             return;
         }
 
         if (text.length > 500) {
-            this.showError('Text is too long. Maximum 500 characters allowed.');
+            this.showError('Il testo è troppo lungo. Massimo 500 caratteri.');
             return;
         }
 
@@ -142,7 +144,7 @@ class VoiceForge {
 
         } catch (error) {
             console.error('TTS Error:', error);
-            this.showError(error.message || 'Failed to generate speech. Please try again.');
+            this.showError(error.message || 'Errore nella generazione audio. Riprova.');
         } finally {
             this.setLoading(false);
         }
