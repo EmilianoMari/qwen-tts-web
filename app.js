@@ -1,8 +1,8 @@
 /**
- * VoiceForge - TTS Frontend
+ * Agent24 TTS - Sintesi Vocale AI
  */
 
-class VoiceForge {
+class Agent24TTS {
     constructor() {
         this.apiUrl = window.TTS_API_URL || 'https://voice.agent24.it';
         this.audioContext = null;
@@ -199,7 +199,7 @@ class VoiceForge {
 
         const a = document.createElement('a');
         a.href = this.currentAudioUrl;
-        a.download = 'voiceforge-audio.wav';
+        a.download = 'agent24-audio.wav';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -220,7 +220,7 @@ class VoiceForge {
 
         // Draw idle wave
         ctx.beginPath();
-        ctx.strokeStyle = 'rgba(99, 102, 241, 0.3)';
+        ctx.strokeStyle = 'rgba(255, 140, 4, 0.3)';
         ctx.lineWidth = 2;
 
         const centerY = height / 2;
@@ -262,9 +262,9 @@ class VoiceForge {
             let x = 0;
 
             const gradient = ctx.createLinearGradient(0, 0, width, 0);
-            gradient.addColorStop(0, '#6366f1');
-            gradient.addColorStop(0.5, '#22d3ee');
-            gradient.addColorStop(1, '#f472b6');
+            gradient.addColorStop(0, '#ff8c04');
+            gradient.addColorStop(0.5, '#ffa033');
+            gradient.addColorStop(1, '#ff8c04');
 
             for (let i = 0; i < bufferLength; i++) {
                 const barHeight = (dataArray[i] / 255) * height * 0.8;
@@ -296,5 +296,5 @@ class VoiceForge {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    window.voiceForge = new VoiceForge();
+    window.agent24TTS = new Agent24TTS();
 });

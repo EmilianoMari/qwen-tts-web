@@ -3,36 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoiceForge - Sintesi Vocale AI</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎙</text></svg>">
+    <title>Agent24 TTS - Sintesi Vocale AI</title>
+    <link rel="icon" href="https://www.agent24.it/wp-content/uploads/sites/3/2025/09/LogoUffAgent.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="background">
-        <div class="gradient-orb orb-1"></div>
-        <div class="gradient-orb orb-2"></div>
-        <div class="gradient-orb orb-3"></div>
-    </div>
-
     <div class="container">
         <header>
             <div class="logo">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                        <line x1="12" x2="12" y1="19" y2="22"/>
-                    </svg>
-                </div>
-                <h1>VoiceForge</h1>
+                <img src="https://www.agent24.it/wp-content/uploads/sites/3/2025/09/LogoUffAgent.png" alt="Agent24" class="logo-img">
             </div>
+            <h1>Text to <span>Speech</span></h1>
             <p class="tagline">Trasforma il testo in voce naturale con l'AI</p>
         </header>
 
         <main>
-            <div class="card glass">
+            <div class="card">
                 <div class="input-section">
-                    <label for="text-input">Inserisci il testo</label>
+                    <label for="text-input">Testo da convertire</label>
                     <textarea
                         id="text-input"
                         placeholder="Scrivi o incolla il testo da convertire in voce..."
@@ -44,10 +32,10 @@
                 </div>
 
                 <div class="voice-section">
-                    <label for="voice-description">Descrivi la voce</label>
+                    <label for="voice-description">Descrizione voce</label>
                     <textarea
                         id="voice-description"
-                        placeholder="es. Una voce femminile calda, 30 anni, che parla lentamente e con calma..."
+                        placeholder="es. Una voce femminile calda, 30 anni, che parla lentamente..."
                         rows="2"
                     ></textarea>
                 </div>
@@ -57,13 +45,13 @@
                     <select id="language-select">
                         <option value="ITALIAN">Italiano</option>
                         <option value="ENGLISH">Inglese</option>
+                        <option value="FRENCH">Francese</option>
+                        <option value="SPANISH">Spagnolo</option>
+                        <option value="GERMAN">Tedesco</option>
+                        <option value="PORTUGUESE">Portoghese</option>
                         <option value="CHINESE">Cinese</option>
                         <option value="JAPANESE">Giapponese</option>
                         <option value="KOREAN">Coreano</option>
-                        <option value="GERMAN">Tedesco</option>
-                        <option value="FRENCH">Francese</option>
-                        <option value="SPANISH">Spagnolo</option>
-                        <option value="PORTUGUESE">Portoghese</option>
                         <option value="RUSSIAN">Russo</option>
                     </select>
                 </div>
@@ -121,7 +109,7 @@
         </main>
 
         <footer>
-            <p>Powered by Qwen3 TTS</p>
+            <p><a href="https://agent24.it" target="_blank">agent24.it</a> - Agenti AI 24/7</p>
         </footer>
     </div>
 
