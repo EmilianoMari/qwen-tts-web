@@ -32,10 +32,10 @@ RUN chown -R nginx:nginx /usr/share/nginx/html
 USER nginx
 
 # Expose port
-EXPOSE 80
+EXPOSE 8002
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD wget -q --spider http://localhost/health || exit 1
+    CMD wget -q --spider http://localhost:8002/health || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
