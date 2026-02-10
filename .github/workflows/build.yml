@@ -26,7 +26,7 @@ jobs:
       - name: Set image metadata
         id: meta
         run: |
-          REPO_NAME="qwen-tts-web"
+          REPO_NAME="agent24-tts-web"
           OWNER_NAME=$(dirname "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')
           SHORT_SHA=$(echo "${GITHUB_SHA}" | cut -c1-7)
           IMAGE_TAG="prod-${SHORT_SHA}"
@@ -115,7 +115,7 @@ jobs:
         run: |
           cd seas-infra
 
-          PACK_PATH="packs/qwen-tts-web"
+          PACK_PATH="packs/agent24-tts-web"
 
           echo "============================================"
           echo "Deploying image: $FULL_IMAGE"
@@ -137,7 +137,7 @@ jobs:
 
           echo "Pack rendered successfully"
 
-          TEMP_JOB="/tmp/qwen-tts-web.nomad"
+          TEMP_JOB="/tmp/agent24-tts-web.nomad"
           echo "$RENDERED" | tail -n +3 > "$TEMP_JOB"
 
           JOB_JSON=$(nomad job run -output "$TEMP_JOB" 2>&1)
