@@ -28,6 +28,18 @@
         </div>
 
         <div class="card">
+            <!-- Model Selector -->
+            <div class="model-selector">
+                <button class="model-tab active" data-model="cosyvoice">
+                    CosyVoice2
+                    <span class="model-badge">0.5B</span>
+                </button>
+                <button class="model-tab" data-model="orpheus">
+                    Orpheus
+                    <span class="model-badge">3B</span>
+                </button>
+            </div>
+
             <!-- Text Input -->
             <div class="field">
                 <div class="field-header">
@@ -42,31 +54,26 @@
                 ></textarea>
             </div>
 
-            <!-- Voice Description -->
-            <div class="field">
-                <label for="voice-description">Descrizione voce</label>
-                <textarea
-                    id="voice-description"
-                    placeholder="es. Una voce femminile calda, 30 anni, tono rassicurante..."
-                    rows="2"
-                ></textarea>
-            </div>
-
-            <!-- Language + Generate -->
+            <!-- Voice + Language + Generate -->
             <div class="action-row">
+                <div class="field field-inline">
+                    <label for="voice-select">Voce</label>
+                    <select id="voice-select">
+                        <option value="">Caricamento...</option>
+                    </select>
+                </div>
                 <div class="field field-inline">
                     <label for="language-select">Lingua</label>
                     <select id="language-select">
-                        <option value="ITALIAN">Italiano</option>
-                        <option value="ENGLISH">English</option>
-                        <option value="FRENCH">Fran&ccedil;ais</option>
-                        <option value="SPANISH">Espa&ntilde;ol</option>
-                        <option value="GERMAN">Deutsch</option>
-                        <option value="PORTUGUESE">Portugu&ecirc;s</option>
-                        <option value="CHINESE">中文</option>
-                        <option value="JAPANESE">日本語</option>
-                        <option value="KOREAN">한국어</option>
-                        <option value="RUSSIAN">Русский</option>
+                        <option value="Italian">Italiano</option>
+                        <option value="English">English</option>
+                        <option value="French">Fran&ccedil;ais</option>
+                        <option value="Spanish">Espa&ntilde;ol</option>
+                        <option value="German">Deutsch</option>
+                        <option value="Portuguese">Portugu&ecirc;s</option>
+                        <option value="Chinese">中文</option>
+                        <option value="Japanese">日本語</option>
+                        <option value="Korean">한국어</option>
                     </select>
                 </div>
                 <button id="generate-btn" class="btn-generate">
@@ -84,7 +91,7 @@
                     <span class="timer-dot"></span>
                     <span class="timer-label">Tempo</span>
                     <span id="timer-value" class="timer-value">0.0s</span>
-                    <span class="timer-model">Qwen3-TTS 1.7B</span>
+                    <span id="timer-model" class="timer-model">CosyVoice2 0.5B</span>
                 </div>
             </div>
 

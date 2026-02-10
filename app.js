@@ -5,6 +5,7 @@
 class Agent24TTS {
     constructor() {
         this.apiUrl = window.TTS_API_URL || 'https://voice.agent24.it';
+        this.currentModelId = 'cosyvoice';
         this.audioContext = null;
         this.analyser = null;
         this.sourceNode = null;
@@ -17,11 +18,12 @@ class Agent24TTS {
         this.initElements();
         this.initEvents();
         this.initAudioContext();
+        this.loadModels();
     }
 
     initElements() {
         this.textInput = document.getElementById('text-input');
-        this.voiceDescription = document.getElementById('voice-description');
+        this.voiceSelect = document.getElementById('voice-select');
         this.languageSelect = document.getElementById('language-select');
         this.charCount = document.getElementById('char-count');
         this.charCounter = document.querySelector('.char-counter');
@@ -39,7 +41,9 @@ class Agent24TTS {
         this.errorMessage = document.getElementById('error-message');
         this.generationTimer = document.getElementById('generation-timer');
         this.timerValue = document.getElementById('timer-value');
+        this.timerModel = document.getElementById('timer-model');
         this.timerContent = this.generationTimer.querySelector('.timer-content');
+        this.modelTabs = document.querySelectorAll('.model-tab');
         this.canvasCtx = this.waveformCanvas.getContext('2d');
     }
 
@@ -54,6 +58,14 @@ class Agent24TTS {
         this.audioPlayer.addEventListener('ended', () => this.onAudioEnded());
         this.audioPlayer.addEventListener('play', () => this.onPlay());
         this.audioPlayer.addEventListener('pause', () => this.onPause());
+
+        // Model tab switching
+        this.modelTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const modelId = tab.dataset.model;
+                this.switchModel(modelId);
+            });
+        });
 
         document.querySelectorAll('textarea').forEach(textarea => {
             textarea.addEventListener('keydown', (e) => {
@@ -93,6 +105,68 @@ class Agent24TTS {
         }
     }
 
+    async loadModels() {
+        try {
+            const response = await fetch(`${this.apiUrl}/models`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            this.models = await response.json();
+
+            // Update tab labels from server data
+            this.models.forEach(m => {
+                const tab = document.querySelector(`.model-tab[data-model="${m.id}"]`);
+                if (tab) {
+                    const badge = tab.querySelector('.model-badge');
+                    if (badge) badge.textContent = m.label.split(' ').pop();
+                }
+            });
+        } catch (e) {
+            console.warn('Failed to load models:', e);
+        }
+
+        this.loadVoices();
+    }
+
+    switchModel(modelId) {
+        this.currentModelId = modelId;
+        this.modelTabs.forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.model === modelId);
+        });
+        this.loadVoices();
+    }
+
+    async loadVoices() {
+        this.voiceSelect.innerHTML = '<option value="">Caricamento...</option>';
+        this.voiceSelect.disabled = true;
+
+        try {
+            const response = await fetch(`${this.apiUrl}/voices?model=${this.currentModelId}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const voices = await response.json();
+            this.voiceSelect.innerHTML = '';
+
+            voices.forEach(voice => {
+                const option = document.createElement('option');
+                option.value = voice.value;
+                option.textContent = `${voice.name} — ${voice.description}`;
+                this.voiceSelect.appendChild(option);
+            });
+
+            this.voiceSelect.disabled = false;
+        } catch (e) {
+            console.warn('Failed to load voices:', e);
+            this.voiceSelect.innerHTML = '<option value="">Voci non disponibili</option>';
+        }
+    }
+
+    getModelLabel() {
+        if (this.models) {
+            const m = this.models.find(m => m.id === this.currentModelId);
+            if (m) return m.label;
+        }
+        return this.currentModelId;
+    }
+
     updateCharCount() {
         const count = this.textInput.value.length;
         this.charCount.textContent = count;
@@ -103,7 +177,7 @@ class Agent24TTS {
 
     async generateSpeech() {
         const text = this.textInput.value.trim();
-        const voiceDescription = this.voiceDescription.value.trim() || 'Una voce naturale e chiara';
+        const voice = this.voiceSelect.value;
         const language = this.languageSelect.value;
 
         if (!text) {
@@ -116,15 +190,25 @@ class Agent24TTS {
             return;
         }
 
+        if (!voice) {
+            this.showError('Seleziona una voce.');
+            return;
+        }
+
         this.hideError();
         this.setLoading(true);
         this.startTimer();
 
         try {
-            const response = await fetch(`${this.apiUrl}/synthesize/design`, {
+            const response = await fetch(`${this.apiUrl}/synthesize`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text, voice_description: voiceDescription, language }),
+                body: JSON.stringify({
+                    text,
+                    voice,
+                    language,
+                    model: this.currentModelId,
+                }),
             });
 
             if (!response.ok) {
@@ -307,13 +391,11 @@ class Agent24TTS {
                 const intensity = value / 255;
                 const alpha = 0.15 + intensity * 0.7;
 
-                // Bottom reflection
                 ctx.fillStyle = `rgba(249, 115, 22, ${alpha * 0.25})`;
                 ctx.beginPath();
                 ctx.roundRect(x, centerY, barWidth, barHeight / 2, 1);
                 ctx.fill();
 
-                // Main bar
                 ctx.fillStyle = `rgba(249, 115, 22, ${alpha})`;
                 ctx.beginPath();
                 ctx.roundRect(x, centerY - barHeight / 2, barWidth, barHeight / 2, 1);
@@ -331,6 +413,7 @@ class Agent24TTS {
         this.generationTimer.classList.remove('hidden');
         this.timerContent.classList.remove('completed');
         this.timerValue.textContent = '0.0s';
+        this.timerModel.textContent = this.getModelLabel();
 
         this.timerInterval = setInterval(() => {
             const elapsed = (performance.now() - this.timerStartTime) / 1000;
