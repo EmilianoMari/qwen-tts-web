@@ -144,6 +144,7 @@ body {
 /* ── Model Selector ──────────────────── */
 .model-selector {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 24px;
     padding: 4px;
@@ -153,7 +154,8 @@ body {
 }
 
 .model-tab {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 140px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -163,7 +165,7 @@ body {
     border: 1px solid transparent;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12px;
     white-space: nowrap;
     font-family: var(--font);
     font-size: 14px;
